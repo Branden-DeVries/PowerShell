@@ -333,3 +333,23 @@ function Join-Object
 Export-ModuleMember -Function Join-Object
 Export-ModuleMember -Function Get-PartitionAccessPath
 Export-ModuleMember -Function Get-DBFileDiskMapping
+
+<#
+Find out if Other databases are on cloned volume
+$x|%{
+    #Write-Host $_.databasename -ForegroundColor Green
+    if($databases.DatabaseName -contains $_.DatabaseName){
+       "{0},{1}" -f $_.disknumber,$_.databasename  
+        ($x|Where DiskNumber -eq $_.disknumber).DatabaseName|%{
+            if($_ -notin $databases.databasename){
+                Write-Warning "$_ is not in the list of databases to clone.`n`t`tIt may be sharing a disk with a cloned database.`n`t`tMove the database to another disk that is not being cloned"
+            }
+        }
+               
+    }
+
+}
+
+More changes
+
+#>
